@@ -22,3 +22,6 @@ go.work
 
 # Air temp files
 tmp
+
+#environment variables
+.env
