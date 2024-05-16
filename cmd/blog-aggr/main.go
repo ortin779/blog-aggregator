@@ -40,6 +40,7 @@ func main() {
 	mux.HandleFunc("GET /v1/err", handlers.ErrorHandler)
 
 	mux.HandleFunc("POST /v1/users", userHandler.CreateUser)
+	mux.HandleFunc("GET /v1/users", userHandler.GetUserByApikey)
 
 	corsMux := middleware.Cors(mux)
 

@@ -3,6 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -46,6 +47,22 @@ func (usrHandl *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) 
 	}
 
 	usr, err := usrHandl.DB.CreateUser(r.Context(), user)
+	if err != nil {
+		helpers.RespondWithError(w, 500, err.Error())
+		return
+	}
+
+	helpers.RespondWithJSON(w, 200, usr)
+}
+
+func (usrHandl *UserHandler) GetUserByApikey(w http.ResponseWriter, r *http.Request) {
+	apiKey := r.Header.Get("Authorization")
+	parts := strings.Split(apiKey, " ")
+	if len(parts) < 2 {
+		helpers.RespondWithError(w, 400, "invalid api key")
+	}
+
+	usr, err := usrHandl.DB.GetUserByApikey(r.Context(), parts[1])
 	if err != nil {
 		helpers.RespondWithError(w, 500, err.Error())
 		return
